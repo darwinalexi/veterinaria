@@ -21,7 +21,7 @@ export const listar_pets= async(req, res)=>{
         const [listar] = await Conexion.query("select*from mascotas");
 
         if (listar.length > 0) {
-            res.status(200).json({ mensaje:listar});
+            res.status(200).json(listar);
         } else {
             res.status(404).json({ mensaje: "no se encontraron  mascotas registradas"});
         }
@@ -35,8 +35,8 @@ export const listar_pets= async(req, res)=>{
 export const crear_pets = async (req, res) => {
     try {
        const {raza, categoria_id, genero_id, id_amo}=req.body;
-       const {foto} = req.file.originalname;
-       const regiterpets= await Conexion.query("insert into mascotas(raza, categoria_id,foto,genero_id,id_amo)values(?,?,?,?,?)",[raza,categoria_id,foto,genero_id,id_amo])
+       const foto = req.file.originalname;
+       const [regiterpets]= await Conexion.query("insert into mascotas(raza, categoria_id,foto,genero_id,id_amo)values(?,?,?,?,?)",[raza,categoria_id,foto,genero_id,id_amo])
        
 
        if (regiterpets.affectedRows>0) {
@@ -59,10 +59,12 @@ export const crear_pets = async (req, res) => {
 export const actualizar_pets = async(req, res)=>{
     try {
         const{id}= req.params;
-        const { raza, categoria_id,foto, genero_id}= req.body;
-        const [listar]= await Conexion.query("update mascotas set raza=?,categoria_id=? ,foto=?, genero_id=? where id=?",[raza,categoria_id,foto,genero_id, id]);
+        const { raza, categoria_id,genero_id}= req.body;
 
-        if (listar.affectedRows>0) {
+        const foto=req.file.originalname
+        const [actualizar]= await Conexion.query("update mascotas set raza=?,categoria_id=? ,foto=?, genero_id=? where id=?",[raza,categoria_id,foto,genero_id, id]);
+
+        if (actualizar.affectedRows>0) {
             res.status(200).json({
                 "mensaje":"se actualizo con exito"
             })

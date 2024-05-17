@@ -6,6 +6,7 @@ import { router_gender } from "./src/router/router.gender.js";
 import ruta_races from "./src/router/router.races.js";
 import rutas_categores from "./src/router/router.categories.js";
 import ruta_Auth from "./src/router/router.Auth.js";
+import cors from "cors"
 const server= express();
 
 const port= 4001;
@@ -13,7 +14,7 @@ const port= 4001;
 server.use(body_parser.json());
 server.use(body_parser.urlencoded({extended:false}))
 
-
+server.use(cors())
 server.use(express.static('./public'))
 
 server.use(ruta_Auth)

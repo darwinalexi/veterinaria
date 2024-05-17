@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 
 function Login() {
@@ -24,6 +25,7 @@ function Login() {
             className="w-full h-full rounded-full opacity-50 placeholder:text-slate-400 focus:outline-none p-4 bg-custom-gray "/>
           <br />
           <button className="bg-sky-800   p-4 w-full m-2 rounded-full">Ingresar</button>
+          <Link to='/mascotas'>mascotas</Link>
         </form>
       </div>
     </div>
