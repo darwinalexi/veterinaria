@@ -7,9 +7,7 @@ export const listar_user= async(req,res)=>{
        const [consulta]= await Conexion.query("select*from usuarios");
 
         if(consulta.length>0){
-            res.status(200).json({
-                "mensaje":consulta
-            })
+            res.status(200).json(consulta)
         }else{
             res.status(404).json({
                 "mensaje":"no se encontro nada"

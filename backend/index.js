@@ -7,6 +7,7 @@ import ruta_races from "./src/router/router.races.js";
 import rutas_categores from "./src/router/router.categories.js";
 import ruta_Auth from "./src/router/router.Auth.js";
 import cors from "cors"
+import ruuta_consulta from "./src/router/consultas.js";
 const server= express();
 
 const port= 4001;
@@ -23,6 +24,7 @@ server.use(ruta_user)
 server.use(ruta_pets)
 server.use(rutas_categores)
 server.use(router_gender)
+server.use(ruuta_consulta)
 
 server.listen(port,()=>{
     console.log("servidor corriendo en el pureto "+port)

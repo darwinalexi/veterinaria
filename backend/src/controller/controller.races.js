@@ -6,9 +6,7 @@ export const listar_races= async(req, res)=>{
         const [listar]= await Conexion.query("select*from razas")
 
         if (listar.length>0) {
-            res.status(200).json({
-                "mensaje":listar
-            })
+            res.status(200).json(listar)
         }else{
             res.status(404).json({
                 "mensaje":"paila no hay nada"
@@ -24,7 +22,7 @@ export const listar_races= async(req, res)=>{
 export const create_races= async(req, res)=>{
     try {
         const{id,nombre}=req.body
-        const [crear]= await Conexion.query(" insert into razas(id, nombre) values(?,?)",[id,nombre])
+        const [crear]= await Conexion.query(" insert into razas(id, nombre_r) values(?,?)",[id,nombre])
 
         if (crear.affectedRows>0) {
             res.status(200).json({
@@ -47,7 +45,7 @@ export const update_races= async(req, res)=>{
    const {id}=req.params
    const {nombre}=req.body
 
-   const [actualizar]= await Conexion.query("update razas set nombre=? where id=?",[nombre,id])
+   const [actualizar]= await Conexion.query("update razas set nombre_r=? where id=?",[nombre,id])
 
    if (actualizar.affectedRows>0) {
     res.status(200).json({

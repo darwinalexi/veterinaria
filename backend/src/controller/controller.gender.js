@@ -4,9 +4,7 @@ export const listar_gender=async(req, res)=>{
     try {
         const[consulta]= await Conexion.query("select*from generos")
         if (consulta.length>0) {
-            res.status(200).json({
-                "mensaje":consulta
-            })
+            res.status(200).json(consulta)
         }else{
             res.status(404).json({
                 "mensaje":"no hay generos registrados"

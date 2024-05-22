@@ -18,7 +18,7 @@ export const saveimg=upload.single('foto')
 
 export const listar_pets= async(req, res)=>{
     try {
-        const [listar] = await Conexion.query("select*from mascotas");
+        const [listar] = await Conexion.query("select nombre_r, nombre_mas, foto, mascotas.id from razas JOIN mascotas ON razas.id = mascotas.raza");
 
         if (listar.length > 0) {
             res.status(200).json(listar);
@@ -32,11 +32,13 @@ export const listar_pets= async(req, res)=>{
 
 }
 
+
+
 export const crear_pets = async (req, res) => {
     try {
-       const {raza, categoria_id, genero_id, id_amo}=req.body;
+       const {raza, categoria_id, genero_id, id_amo, nombre}=req.body;
        const foto = req.file.originalname;
-       const [regiterpets]= await Conexion.query("insert into mascotas(raza, categoria_id,foto,genero_id,id_amo)values(?,?,?,?,?)",[raza,categoria_id,foto,genero_id,id_amo])
+       const [regiterpets]= await Conexion.query("insert into mascotas(raza, categoria_id,foto,genero_id,id_amo, nombre_mas)values(?,?,?,?,?,?)",[raza,categoria_id,foto,genero_id,id_amo, nombre])
        
 
        if (regiterpets.affectedRows>0) {
@@ -59,10 +61,10 @@ export const crear_pets = async (req, res) => {
 export const actualizar_pets = async(req, res)=>{
     try {
         const{id}= req.params;
-        const { raza, categoria_id,genero_id}= req.body;
+        const { raza, categoria_id,genero_id, nombre}= req.body;
 
         const foto=req.file.originalname
-        const [actualizar]= await Conexion.query("update mascotas set raza=?,categoria_id=? ,foto=?, genero_id=? where id=?",[raza,categoria_id,foto,genero_id, id]);
+        const [actualizar]= await Conexion.query("update mascotas set raza=?,categoria_id=? ,foto=?, genero_id=?, nombre=? where id=?",[raza,categoria_id,foto,genero_id, id,nombre]);
 
         if (actualizar.affectedRows>0) {
             res.status(200).json({
@@ -99,6 +101,53 @@ export const eliminar_pets= async(req,res)=>{
         console.log(error)
         res.status(500).json({
             "mensaje":error
+        })
+    }
+}
+
+export const listar_mascota= async(req, res)=>{
+    try{
+const{id}=req.params
+        const[mostrar]= await Conexion.query("select*from mascotas where id=?",[id]);
+
+        if (mostrar.length>0) {
+
+            res.status(200).json({
+                "MENSAJE":mostrar
+            })
+        }else{
+            res.status(404).json({
+                "MENSAJE":"no hay registro de  mascotas"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            "MENSAJE":error
+        })
+    }
+}
+
+
+
+
+export const listar_mascotas= async(req, res)=>{
+    try{
+
+        const[mostrar]= await Conexion.query("select*from mascotas ");
+
+        if (mostrar.length>0) {
+
+            res.status(200).json({
+                "MENSAJE":mostrar
+            })
+        }else{
+            res.status(404).json({
+                "MENSAJE":"no hay registro de  mascotas"
+            })
+        }
+    }catch(error){
+        res.status(500).json({
+            "MENSAJE":error
         })
     }
 }
