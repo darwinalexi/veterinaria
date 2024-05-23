@@ -2,7 +2,7 @@ import { Conexion } from "../database/conexion.js";
 
 export const listar_gender=async(req, res)=>{
     try {
-        const[consulta]= await Conexion.query("select*from generos")
+        const[consulta]= await Conexion.query("select*from genero")
         if (consulta.length>0) {
             res.status(200).json(consulta)
         }else{
@@ -21,8 +21,8 @@ export const listar_gender=async(req, res)=>{
 
 export const crear_gender=async(req, res)=>{
     try {
-        const {id, nombre}= req.body
-        const[consulta]= await Conexion.query("insert into generos(id,nombre) values(?,?)",[id,nombre])
+        const {nombre}= req.body
+        const[consulta]= await Conexion.query("insert into genero(nombre) values(?)",[nombre])
         if (consulta.affectedRows>0) {
             res.status(200).json({
                 "mensaje":"se registro el genero"

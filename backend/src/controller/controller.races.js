@@ -21,8 +21,8 @@ export const listar_races= async(req, res)=>{
 
 export const create_races= async(req, res)=>{
     try {
-        const{id,nombre}=req.body
-        const [crear]= await Conexion.query(" insert into razas(id, nombre_r) values(?,?)",[id,nombre])
+        const{id,nombre_r}=req.body
+        const [crear]= await Conexion.query(" insert into razas(id, nombre_r) values(?,?)",[id,nombre_r])
 
         if (crear.affectedRows>0) {
             res.status(200).json({

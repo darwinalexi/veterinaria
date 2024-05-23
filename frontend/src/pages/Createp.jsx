@@ -7,17 +7,15 @@ const Create_Pets = () => {
         foto: null, 
         raza:'',
         genero_id: '',
-        id_amo: '',
         nombre_mas:''
     });
     
-
+    const formData = new FormData();
     const [mascota, setmascotas]=useState([])
-
-    const [usuarios,setusuarios]=useState([]);
 
     const [razas, setrazas]=useState([]);
     const [genero, setgenero]=useState([]);
+
     const  listar_categorias=async()=>{
         try {
             
@@ -41,15 +39,7 @@ const Create_Pets = () => {
         }
     }
 
-    const listar_user=async()=>{
-        try {
-            const listar=await axios.get("http://localhost:4001/listar")
-            setusuarios(listar.data)
-            console.log("usuarios", listar)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    
 
 const listar_genero=async()=>{
     try {
@@ -60,27 +50,37 @@ const listar_genero=async()=>{
         console.log(error);
     }
 }
+
     useEffect(()=>{
-        listar_user();
         listar_categorias();
         listar_razas();
         listar_genero();
     },[])
 
+    const handinputchange=(event)=>{
+        setvalores({
+          ...valores,
+          [event.target.name]:event.target.value
+        })
+        console.log(valores)
+      }
 
 
-
-    const crear_mascotas = async (event) => {
+      const crear_mascotas = async (event) => {
         event.preventDefault();
-        //se guarda la foto
         const formData = new FormData();
         Object.keys(valores).forEach(key => {
             formData.append(key, valores[key]);
         });
-const valor=FormData+valores
+    
+        // Capturar el archivo seleccionado
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput.files && fileInput.files[0]) {
+            formData.append('foto', fileInput.files[0]);
+        }
+    
         try {
-            const response = await axios.post('http://localhost:4001/crear_pets', valor );
-            
+            const response = await axios.post('http://localhost:4001/crear_pets', formData);
             if (response.status === 200) {
                 console.log(response.data.mensaje);
             } else {
@@ -90,19 +90,8 @@ const valor=FormData+valores
             console.error(error);
         }
     };
-
-    const handleChange = (event) => {
-        const { name, type, files } = event.target;
     
-        let value = type === 'file'? files[0] : event.target.value;
     
-        setvalores(prevState => ({
-           ...prevState,
-            [name]: value
-        }));
-    
-        console.log(valores);
-    };
     
    
 
@@ -117,12 +106,12 @@ const valor=FormData+valores
                 </div>
                 <label className="text-white">Ingrese el nombre</label>
                 <br />
-                <input className="bg-gray-500 w-60 rounded-full placeholder:pl-14" type="text" name="nombre_mas" placeholder="ingrese el nombre" onChange={handleChange} />
+                <input className="bg-gray-500 w-60 rounded-full placeholder:pl-14" type="text" name="nombre_mas" placeholder="ingrese el nombre" onChange={handinputchange} />
                 <br />
                 <label className="text-white">Ingresar raza</label>
                 <br />
                 
-                <select name="raza"  onChange={handleChange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
+                <select name="raza"  onChange={handinputchange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
                 <option value="">seleccionar raza</option>
                 {razas.map((raza)=>(
                         <option key={raza.id} value={raza.id}>{`${raza.nombre_r} (${raza.id})`}</option>
@@ -133,8 +122,8 @@ const valor=FormData+valores
                
                 <label  className="text-white">Categoría</label>
                 <br />
-                <select name="categoria_id" id="" onChange={handleChange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
-                    <option value="">seleccione una categoria  </option>
+                <select name="categoria_id" id="" onChange={handinputchange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
+                    <option value="" hidden>seleccione una categoria  </option>
                     {mascota.map((categoria)=>(
                         <option key={categoria.id} value={categoria.id}>{categoria.nombre}</option>
                     ))}
@@ -144,22 +133,13 @@ const valor=FormData+valores
                
                 <label className="text-white">Sube tu imagen de tu mascota</label>
                 <br />
-                <input type="file" name="foto" onChange={handleChange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14"/>
+                <input type="file" name="foto" onChange={handinputchange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14"/>
                 <br />
                 <label className="text-white">Género</label>
                 <br />
-                <select name="genero_id" id=""  onChange={handleChange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
+                <select name="genero_id" id=""  onChange={handinputchange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
                     {genero.map((generos)=>(
                         <option key={generos.id} value={generos.id}>{generos.nombre}</option>
-                    ))}
-                </select>
-                <br />
-                <label className="text-white">ID Amo</label>
-                <br />
-                <select name="amo_id" id="" onChange={handleChange} className="bg-gray-500 w-60 rounded-full placeholder:pl-14">
-                    <option value="">seleccione una categoria  </option>
-                    {usuarios.map((user)=>(
-                        <option key={user.id} value={user.id}>{user.nombre_completo}</option>
                     ))}
                 </select>
                 <br />

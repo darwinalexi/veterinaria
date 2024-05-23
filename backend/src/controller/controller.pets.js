@@ -36,9 +36,9 @@ export const listar_pets= async(req, res)=>{
 
 export const crear_pets = async (req, res) => {
     try {
-       const {raza, categoria_id, genero_id, id_amo, nombre}=req.body;
+       const {raza, categoria_id, genero_id, nombre_mas}=req.body;
        const foto = req.file.originalname;
-       const [regiterpets]= await Conexion.query("insert into mascotas(raza, categoria_id,foto,genero_id,id_amo, nombre_mas)values(?,?,?,?,?,?)",[raza,categoria_id,foto,genero_id,id_amo, nombre])
+       const [regiterpets]= await Conexion.query("insert into mascotas(raza, categoria_id,foto,genero_id,nombre_mas)values(?,?,?,?,?)",[raza,categoria_id,foto,genero_id, nombre_mas])
        
 
        if (regiterpets.affectedRows>0) {
